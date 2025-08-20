@@ -11,7 +11,7 @@ const EMOJIS = [
 function App() {
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Emoji World Cup 🏆</h1>
+      <h1>Emoji Tournament 🏆</h1>
       <EmojiTournament emojis={EMOJIS} />
     </div>
   );
