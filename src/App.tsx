@@ -1,25 +1,18 @@
-import CounterButton from "./components/CounterButton";
-import DeleteButton from "./components/DeleteButton";
-import { useState } from "react";
+// src/App.tsx
+import EmojiTournament from "./components/EmojiTournament";
+
+const EMOJIS = [
+  "😂", "❤️", "😍", "🤣",
+  "😊", "🙏", "💕", "😭",
+  "😘", "👍", "😅", "👏",
+  "😁", "🔥", "🥰", "😎"
+];
 
 function App() {
-  const [items, setItems] = useState(["Item 1", "Item 2", "Item 3"]);
-
-  const handleDelete = () => {
-    setItems((prevItems) => prevItems.slice(0, -1));
-  };
-
   return (
-    <div>
-      <h1>Vite + React</h1>
-      <CounterButton />
-      <DeleteButton onClick={handleDelete} />
-
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
+    <div style={{ textAlign: "center" }}>
+      <h1>Emoji World Cup 🏆</h1>
+      <EmojiTournament emojis={EMOJIS} />
     </div>
   );
 }
