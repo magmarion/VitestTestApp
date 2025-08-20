@@ -30,11 +30,8 @@ describe('EmojiTournament', () => {
     });
 
     it('should declare a final winner', () => {
-        render(<EmojiTournament emojis={EMOJIES} />);
-        // Simulera att användaren klickar på vinnarna i varje omgång
-        fireEvent.click(screen.getByRole('button', { name: "😀" })); // Vinnare: 😀
-        fireEvent.click(screen.getByRole('button', { name: "😍" })); // Vinnare: 😍
-        fireEvent.click(screen.getByRole('button', { name: "😀" })); // Vinnare: 😀
+        render(<EmojiTournament emojis={["😀", "😂"]} />);
+        fireEvent.click(screen.getByRole('button', { name: "😀" }));
         expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
     });
 
@@ -48,5 +45,35 @@ describe('EmojiTournament', () => {
     it('should declare the single emoji as winner', () => {
         render(<EmojiTournament emojis={["😀"]} />);
         expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
+    });
+
+    // Edge case: Udda antal emojis
+    it('should handle odd number of emojis', () => {
+        render(<EmojiTournament emojis={["😀", "😂", "😍"]} />);
+        fireEvent.click(screen.getByRole('button', { name: "😀" }));
+        expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
+    });
+
+    // Omfattande test: Alla omgångar
+    it('should progress through all rounds and declare a winner', () => {
+        render(<EmojiTournament emojis={["😀", "😂", "😍", "🤣"]} />);
+        // Första omgången
+        fireEvent.click(screen.getByRole('button', { name: "😀" }));
+        fireEvent.click(screen.getByRole('button', { name: "😍" }));
+        // Andra omgången
+        fireEvent.click(screen.getByRole('button', { name: "😀" }));
+        // Vinnare deklareras
+        expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
+    });
+
+    // Omfattande test: State-updatering
+    it('should update currentRound and nextRound correctly', () => {
+        render(<EmojiTournament emojis={["😀", "😂", "😍", "🤣"]} />);
+        // Första omgången
+        fireEvent.click(screen.getByRole('button', { name: "😀" }));
+        fireEvent.click(screen.getByRole('button', { name: "😍" }));
+        // Kontrollera att nästa omgång har rätt emojis
+        expect(screen.getByRole('button', { name: "😀" })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: "😍" })).toBeInTheDocument();
     });
 });
