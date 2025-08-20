@@ -11,6 +11,11 @@ export default function EmojiTournament({ emojis }: EmojiTournamentProps) {
     const [nextRound, setNextRound] = useState<string[]>([]);
     const [matchIndex, setMatchIndex] = useState(0);
 
+    // Handle empty emojis array
+    if (currentRound.length === 0) {
+        return <h2>Winner: is undefined</h2>;
+    }
+
     if (currentRound.length === 1) {
         return <h2>Winner: is {currentRound[0]}</h2>;
     }
