@@ -10,7 +10,12 @@ export default defineConfig({
     reporters: ["default"],
     coverage: {
       provider: "istanbul",
-      exclude: ["src/main.tsx"],
+      exclude: [
+        "src/main.tsx",
+        ".eslintrc.cjs",
+        "vite.config.ts",
+        "tsconfig.json",
+      ],
     },
   },
 });
