@@ -2,11 +2,11 @@ import { useState } from "react";
 import EmojiMatch from "./EmojiMatch";
 
 interface EmojiTournamentProps {
-    emojies: string[];
+    emojis: string[];
 }
 
-export default function EmojiTournament({ emojies }: EmojiTournamentProps) {
-    const [currentRound, setCurrentRound] = useState(emojies);
+export default function EmojiTournament({ emojis }: EmojiTournamentProps) {
+    const [currentRound, setCurrentRound] = useState(emojis);
     const [nextRound, setNextRound] = useState<string[]>([]);
     const [matchIndex, setMatchIndex] = useState(0);
 
