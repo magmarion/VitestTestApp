@@ -7,14 +7,14 @@ const EMOJIES = ["😀", "😂", "😍", "🤣"];
 
 describe('EmojiTournament', () => {
     it('should rendern the first match with two emojies', () => {
-        render(<EmojiTournament emojies={EMOJIES} />);
+        render(<EmojiTournament emojis={EMOJIES} />);
 
         expect(screen.getByRole('button', { name: "😀" })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: "😂" })).toBeInTheDocument();
     });
 
     it('should progress winner to the next round', () => {
-        render(<EmojiTournament emojies={EMOJIES} />);
+        render(<EmojiTournament emojis={EMOJIES} />);
 
         fireEvent.click(screen.getByRole('button', { name: "😀" }));
 
@@ -25,7 +25,7 @@ describe('EmojiTournament', () => {
     });
 
     it('should declare a final winner', () => {
-        render(<EmojiTournament emojies={EMOJIES} />);
+        render(<EmojiTournament emojis={EMOJIES} />);
 
         fireEvent.click(screen.getByRole('button', { name: "😀" }));
 
