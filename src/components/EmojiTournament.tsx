@@ -39,7 +39,7 @@ export default function EmojiTournament({ emojis }: EmojiTournamentProps) {
 
     return (
         <div>
-            <h2>Round with {currentRound.length} emojis</h2>
+            <h2>Round of {currentRound.length} </h2>
             <EmojiMatch
                 emoji1={emoji1}
                 emoji2={emoji2}
