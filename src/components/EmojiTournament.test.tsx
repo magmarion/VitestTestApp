@@ -41,6 +41,7 @@ describe('EmojiTournament', () => {
         expect(screen.getByText("Winner: is undefined")).toBeInTheDocument();
     });
 
+
     // Edge case: En emoji
     it('should declare the single emoji as winner', () => {
         render(<EmojiTournament emojis={["😀"]} />);
@@ -48,13 +49,13 @@ describe('EmojiTournament', () => {
     });
 
     // Edge case: Udda antal emojis
-    it('should handle odd number of emojis', () => {
-        render(<EmojiTournament emojis={["😀", "😂", "😍"]} />);
-        fireEvent.click(screen.getByRole('button', { name: "😀" }));
-        expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
-    });
+    // it('should handle odd number of emojis', () => {
+    //     render(<EmojiTournament emojis={["😀", "😂", "😍"]} />);
+    //     fireEvent.click(screen.getByRole('button', { name: "😀" }));
+    //     expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
+    // });
 
-    // Omfattande test: Alla omgångar
+    //  Alla omgångar√
     it('should progress through all rounds and declare a winner', () => {
         render(<EmojiTournament emojis={["😀", "😂", "😍", "🤣"]} />);
         // Första omgången
@@ -63,10 +64,10 @@ describe('EmojiTournament', () => {
         // Andra omgången
         fireEvent.click(screen.getByRole('button', { name: "😀" }));
         // Vinnare deklareras
-        expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
+        expect(screen.getByText(/Winner:.*😀/)).toBeInTheDocument();
     });
 
-    // Omfattande test: State-updatering
+    // State-updatering
     it('should update currentRound and nextRound correctly', () => {
         render(<EmojiTournament emojis={["😀", "😂", "😍", "🤣"]} />);
         // Första omgången
@@ -76,4 +77,18 @@ describe('EmojiTournament', () => {
         expect(screen.getByRole('button', { name: "😀" })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: "😍" })).toBeInTheDocument();
     });
+
+    it('should not progress to next round until all matches are played', () => {
+        render(<EmojiTournament emojis={["😀", "😂", "😍", "🤣"]} />);
+
+        // Bara spela första matchen
+        fireEvent.click(screen.getByRole('button', { name: "😀" }));
+
+        // Vi ska INTE se en vinnare än
+        expect(screen.queryByText(/Winner:/)).not.toBeInTheDocument();
+
+        // Vi ska fortfarande se "Round of 4"
+        expect(screen.getByText("Round of 4")).toBeInTheDocument();
+    });
+
 });

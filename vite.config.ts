@@ -15,8 +15,8 @@ export default defineConfig({
       exclude: [
         "src/main.tsx",
         ".eslintrc.cjs",
-        "vite.config.ts",
-        "tsconfig.json",
+        // "vite.config.ts",
+        // "tsconfig.json",
       ],
     },
   },

@@ -21,8 +21,9 @@ export default function EmojiTournament({ emojis }: EmojiTournamentProps) {
     if (currentRound.length === 1) {
         return (
             <h2 className="text-4xl font-bold text-center my-8">
-                Winner is: {currentRound[0]} 🏆
+                Winner: is {currentRound[0]}
             </h2>
+
         );
     }
 
