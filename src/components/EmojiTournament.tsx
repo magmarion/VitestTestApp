@@ -6,83 +6,44 @@ interface EmojiTournamentProps {
 }
 
 export default function EmojiTournament({ emojis }: EmojiTournamentProps) {
-    const [currentRound, setCurrentRound] = useState<string[]>(emojis);
+    const [currentRound, setCurrentRound] = useState(emojis);
     const [nextRound, setNextRound] = useState<string[]>([]);
-    const [eliminated, setEliminated] = useState<string[]>([]);
-    const [winners, setWinners] = useState<Record<number, string>>({});
+    const [matchIndex, setMatchIndex] = useState(0);
 
+    // Handle empty emojis array
     if (currentRound.length === 0) {
-        return (
-            <h2 className="text-2xl font-bold text-center my-8">
-                Winner: is undefined
-            </h2>
-        );
+        return <h2 className="text-2xl font-bold text-center my-8">Winner: is undefined</h2>;
     }
+
     if (currentRound.length === 1) {
-        return (
-            <h2 className="text-4xl font-bold text-center my-8">
-                Winner: is {currentRound[0]}
-            </h2>
-
-        );
+        return <h2 className="text-4xl font-bold text-center my-8">Winner: is {currentRound[0]}</h2>;
     }
 
-    const handleWinner = (matchIndex: number, winner: string) => {
-        const emojiA = currentRound[matchIndex * 2];
-        const emojiB = currentRound[matchIndex * 2 + 1];
-        const loser = winner === emojiA ? emojiB : emojiA;
+    const emoji1 = currentRound[matchIndex * 2];
+    const emoji2 = currentRound[matchIndex * 2 + 1];
 
-        setEliminated((prev) => [...prev, loser]);
-        setWinners((prev) => ({ ...prev, [matchIndex]: winner }));
-
-        setNextRound((prev) => {
-            const newNextRound = [...prev];
-            newNextRound[matchIndex] = winner;
-            return newNextRound;
-        });
-
-        const totalMatches = currentRound.length / 2;
-        const playedMatches = Object.keys({ ...winners, [matchIndex]: winner }).length;
-        if (playedMatches === totalMatches) {
-            setCurrentRound(nextRound.filter(Boolean).concat(winner));
+    const handleWinner = (winner: string) => {
+        const newNextRound = [...nextRound, winner];
+        if (matchIndex === Math.floor(currentRound.length / 2) - 1) {
+            // All matches in this round are done, move to the next round
+            setCurrentRound(newNextRound);
             setNextRound([]);
-            setEliminated([]);
-            setWinners({});
+            setMatchIndex(0);
+        } else {
+            // Move to the next match
+            setNextRound(newNextRound);
+            setMatchIndex(matchIndex + 1);
         }
     };
 
-    const renderRound = () => {
-        return (
-            <div className="flex flex-row justify-center items-center gap-4 my-8">
-                {Array.from({ length: currentRound.length / 2 }).map((_, i) => {
-                    const emojiA = currentRound[i * 2];
-                    const emojiB = currentRound[i * 2 + 1];
-                    const isEliminatedA = eliminated.includes(emojiA);
-                    const isEliminatedB = eliminated.includes(emojiB);
-                    const winner = winners[i];
-
-                    return (
-                        <EmojiMatch
-                            key={i}
-                            emoji1={emojiA}
-                            emoji2={emojiB}
-                            onWinner={(winner) => handleWinner(i, winner)}
-                            isEliminated1={isEliminatedA}
-                            isEliminated2={isEliminatedB}
-                            winner={winner}
-                        />
-                    );
-                })}
-            </div>
-        );
-    };
-
     return (
-        <div className="py-8 px-4"> {/* <--- ingen bg-färg här längre */}
-            <h2 className="text-2xl font-bold text-center mb-8">
-                Round of {currentRound.length}
-            </h2>
-            {renderRound()}
+        <div className="py-8 px-4">
+            <h2 className="text-2xl font-bold text-center mb-8">Round of {currentRound.length}</h2>
+            <EmojiMatch
+                emoji1={emoji1}
+                emoji2={emoji2}
+                onWinner={handleWinner}
+            />
         </div>
     );
 }
