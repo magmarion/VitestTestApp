@@ -32,7 +32,7 @@ describe('EmojiTournament', () => {
     it('should declare a final winner', () => {
         render(<EmojiTournament emojis={["😀", "😂"]} />);
         fireEvent.click(screen.getByRole('button', { name: "😀" }));
-        expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
+        expect(screen.getByText("Winner: 😀")).toBeInTheDocument();
     });
 
     // Edge case: Tom lista
@@ -45,7 +45,7 @@ describe('EmojiTournament', () => {
     // Edge case: En emoji
     it('should declare the single emoji as winner', () => {
         render(<EmojiTournament emojis={["😀"]} />);
-        expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
+        expect(screen.getByText("Winner: 😀")).toBeInTheDocument();
     });
 
     // Edge case: Udda antal emojis

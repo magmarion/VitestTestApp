@@ -17,7 +17,7 @@ export default function EmojiTournament({ emojis }: EmojiTournamentProps) {
 
     // Hantera endast en emoji
     if (currentRound.length === 1) {
-        return <h2 className="text-4xl font-bold text-center my-8">Winner: is {currentRound[0]}</h2>;
+        return <h2 className="text-4xl font-bold text-center my-8">Winner: {currentRound[0]}</h2>;
     }
 
     // Wrapper för att hantera vinnare för en specifik match
