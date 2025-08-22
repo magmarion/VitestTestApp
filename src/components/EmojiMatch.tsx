@@ -13,31 +13,40 @@ export default function EmojiMatch({
     onWinner,
     isEliminated1 = false,
     isEliminated2 = false,
-    winner,
+    winner
+    
 }: EmojiMatchProps) {
+
+    const getButtonClass = (emoji: string, isEliminated: boolean) => {
+        let baseClass = "text-5xl p-4 rounded-full shadow-md transition-all duration-300 focus:outline-none focus:ring-4 border-2 ";
+
+        if (winner === emoji) {
+            return baseClass + "bg-green-200 border-green-400 scale-110 cursor-default";
+        }
+
+        if (isEliminated) {
+            return baseClass + "bg-gray-300 border-gray-400 opacity-50 cursor-not-allowed";
+        }
+
+        return baseClass + "bg-white border-gray-300 hover:shadow-lg hover:scale-110 hover:border-blue-300 cursor-pointer";
+    };
+
     return (
-        <div className="flex gap-2 justify-center items-center my-2">
+        <div className="flex items-center justify-center gap-6 p-4">
             <button
-                onClick={() => onWinner(emoji1)}
+                onClick={() => !isEliminated1 && onWinner(emoji1)}
+                className={getButtonClass(emoji1, isEliminated1)}
                 disabled={isEliminated1}
-                className={`
-                    text-4xl p-4 rounded-lg border-2
-                    ${isEliminated1 ? "bg-gray-300 border-gray-400" :
-                        winner === emoji1 ? "bg-green-200 border-green-500" :
-                            "bg-white border-gray-500"}
-                `}
             >
                 {emoji1}
             </button>
+
+            <span className="text-xl text-gray-500 font-medium">vs</span>
+
             <button
-                onClick={() => onWinner(emoji2)}
+                onClick={() => !isEliminated2 && onWinner(emoji2)}
+                className={getButtonClass(emoji2, isEliminated2)}
                 disabled={isEliminated2}
-                className={`
-                    text-4xl p-4 rounded-lg border-2
-                    ${isEliminated2 ? "bg-gray-300 border-gray-400" :
-                        winner === emoji2 ? "bg-green-200 border-green-500" :
-                            "bg-white border-gray-500"}
-                `}
             >
                 {emoji2}
             </button>
