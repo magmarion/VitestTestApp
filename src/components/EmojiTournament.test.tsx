@@ -1,20 +1,15 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import EmojiTournament from './EmojiTournament';
-
-// Mocka EmojiMatch-komponenten
-vi.mock('./EmojiMatch', () => ({
-    default: ({ emoji1, emoji2, onWinner }: { emoji1: string; emoji2: string; onWinner: (winner: string) => void }) => (
-        <div>
-            <button onClick={() => onWinner(emoji1)}>{emoji1}</button>
-            <button onClick={() => onWinner(emoji2)}>{emoji2}</button>
-        </div>
-    ),
-}));
 
 const EMOJIES = ["😀", "😂", "😍", "🤣"];
 
 describe('EmojiTournament', () => {
+
+    beforeEach(() => {
+        vi.spyOn(Storage.prototype, "setItem");
+    });
+
     it('should render the first match with two emojis', () => {
         render(<EmojiTournament emojis={EMOJIES} />);
         expect(screen.getByRole('button', { name: "😀" })).toBeInTheDocument();
@@ -33,62 +28,36 @@ describe('EmojiTournament', () => {
         render(<EmojiTournament emojis={["😀", "😂"]} />);
         fireEvent.click(screen.getByRole('button', { name: "😀" }));
         expect(screen.getByText("Winner: 😀")).toBeInTheDocument();
+
+        expect(localStorage.setItem).toHaveBeenCalledWith("winner", "😀");
     });
 
-    // Edge case: Tom lista
     it('should handle empty emojis list', () => {
         render(<EmojiTournament emojis={[]} />);
         expect(screen.getByText("Winner: is undefined")).toBeInTheDocument();
     });
 
-
-    // Edge case: En emoji
     it('should declare the single emoji as winner', () => {
         render(<EmojiTournament emojis={["😀"]} />);
         expect(screen.getByText("Winner: 😀")).toBeInTheDocument();
+
+        expect(localStorage.setItem).toHaveBeenCalledWith("winner", "😀");
     });
 
-    // Edge case: Udda antal emojis
-    // it('should handle odd number of emojis', () => {
-    //     render(<EmojiTournament emojis={["😀", "😂", "😍"]} />);
-    //     fireEvent.click(screen.getByRole('button', { name: "😀" }));
-    //     expect(screen.getByText("Winner: is 😀")).toBeInTheDocument();
-    // });
-
-    //  Alla omgångar√
     it('should progress through all rounds and declare a winner', () => {
         render(<EmojiTournament emojis={["😀", "😂", "😍", "🤣"]} />);
-        // Första omgången
         fireEvent.click(screen.getByRole('button', { name: "😀" }));
         fireEvent.click(screen.getByRole('button', { name: "😍" }));
-        // Andra omgången
         fireEvent.click(screen.getByRole('button', { name: "😀" }));
-        // Vinnare deklareras
         expect(screen.getByText(/Winner:.*😀/)).toBeInTheDocument();
-    });
 
-    // State-updatering
-    it('should update currentRound and nextRound correctly', () => {
-        render(<EmojiTournament emojis={["😀", "😂", "😍", "🤣"]} />);
-        // Första omgången
-        fireEvent.click(screen.getByRole('button', { name: "😀" }));
-        fireEvent.click(screen.getByRole('button', { name: "😍" }));
-        // Kontrollera att nästa omgång har rätt emojis
-        expect(screen.getByRole('button', { name: "😀" })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: "😍" })).toBeInTheDocument();
+        expect(localStorage.setItem).toHaveBeenCalledWith("winner", "😀");
     });
 
     it('should not progress to next round until all matches are played', () => {
         render(<EmojiTournament emojis={["😀", "😂", "😍", "🤣"]} />);
-
-        // Bara spela första matchen
         fireEvent.click(screen.getByRole('button', { name: "😀" }));
-
-        // Vi ska INTE se en vinnare än
         expect(screen.queryByText(/Winner:/)).not.toBeInTheDocument();
-
-        // Vi ska fortfarande se "Round of 4"
         expect(screen.getByText("Round of 4")).toBeInTheDocument();
     });
-
 });

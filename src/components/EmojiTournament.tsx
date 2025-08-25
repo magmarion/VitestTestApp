@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EmojiMatch from "./EmojiMatch";
 
 interface EmojiTournamentProps {
@@ -9,6 +9,13 @@ export default function EmojiTournament({ emojis }: EmojiTournamentProps) {
     const [currentRound, setCurrentRound] = useState(emojis);
     const [nextRound, setNextRound] = useState<string[]>([]);
     const [winners, setWinners] = useState<Record<number, string>>({});
+
+    // 🆕 Spara vinnaren i localStorage när en vinnare finns
+    useEffect(() => {
+        if (currentRound.length === 1) {
+            localStorage.setItem("winner", currentRound[0]); // extern effekt
+        }
+    }, [currentRound]);
 
     // Hantera tom lista
     if (currentRound.length === 0) {
