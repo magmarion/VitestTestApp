@@ -1,4 +1,15 @@
-# Kodbas för Enhets- och integrationstestning av React komponenter.
+
+# Emoji Tournament
+
+Ett litet React-projekt som låter dig köra en turnering mellan emojis.  
+Användaren kan välja vinnare i varje match tills en slutlig vinnare utses.  
+Slutvinnaren sparas även i `localStorage`.
+
+## Kom igång
+
+### Förutsättningar
+- Node.js (>=18)
+- npm eller yarn
 
 ## Installation
 
@@ -15,5 +26,3 @@ Kör `npm test` för att köra testerna. Kan köras utan att utvecklingsservern 
 ## Coverage
 
 Kör `npm run coverage` för att se hur stor del av kodbasen som testerna täcker.
-
-Observera att det nu finns en mapp [coverage](./coverage) med en massa filer (en hemsida). Du kan starta [index.html](./coverage/index.html) filen med live server för att öppna hemsidan. Där ser du mer detaljer om vad dina tester faktiskt testar och inte.
